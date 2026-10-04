@@ -1,4 +1,4 @@
-// Jadwal Keberangkatan - Engine Multi-Rute Simultan
+// HEDGE (Headway Generator) By Mikrotrans Utara - Engine Multi-Rute Simultan
 (function(){
   const $ = id => document.getElementById(id);
   const STORAGE_KEY = 'jadwalApp_multi_v5';
@@ -343,6 +343,10 @@
     if (tab==='order') renderOrderList();
     if (tab==='unit') renderUnitList();
     if (tab==='route') renderRouteList();
+    const mobileActionDock = $('mobileActionDock');
+    if (mobileActionDock){
+      mobileActionDock.style.display = tab === 'jadwal' ? 'grid' : 'none';
+    }
     window.scrollTo({top:0, behavior:'instant'});
   }
 
@@ -1839,6 +1843,7 @@
     const lastRow = body.querySelector('.row-item:last-child');
     if (lastRow) lastRow.classList.add('last-row');
     resultSection.style.display = 'block';
+    updateCockpitHud(new Date());
   }
 
   // Buat Jadwal Rute Ini
@@ -1858,6 +1863,12 @@
       renderDirtyBanner();
       renderRouteBar();
       refreshPapanIfOpen();
+      const paramDrawer = $('paramDrawer');
+      const toggleParamBtn = $('toggleParamBtn');
+      if (paramDrawer && !paramDrawer.classList.contains('collapsed')){
+        paramDrawer.classList.add('collapsed');
+        if (toggleParamBtn) toggleParamBtn.classList.remove('open');
+      }
       if (resultSection) resultSection.scrollIntoView({behavior:'smooth', block:'start'});
       showToast('Jadwal rute ' + cur.name + ' siap');
     });
@@ -2011,7 +2022,8 @@
     const cur = getActiveRoute();
     const now = new Date();
     const dateFormatted = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    let text = '🚌 *JADWAL KEBERANGKATAN MIKROTRANS*\n';
+    let text = '🚌 *HEDGE — HEADWAY GENERATOR*\n';
+    text += '🏢 *By Mikrotrans Utara*\n';
     text += '📍 *Rute:* ' + cur.name + '\n';
     text += '📅 *Hari/Tanggal:* ' + dateFormatted + '\n';
     text += '⏰ *Jam Operasional:* ' + lastSchedule.startLabel + ' - ' + lastSchedule.endLabel + ' (' + lastSchedule.R + ' Rit)\n';
@@ -2028,7 +2040,7 @@
       text += String(r.no).padStart(2, '0') + '. Unit *' + r.unit + '* ➔ ' + r.jam + gapText + peakTag + '\n';
     });
     text += '\n━━━━━━━━━━━━━━━━━━━━\n';
-    text += '_Dipantau via Dispatcher Mikrotrans_';
+    text += '_Dipantau via HEDGE (Headway Generator) By Mikrotrans Utara_';
 
     const btn = $('copyBtn');
     const doneMsg = () => {
@@ -2642,10 +2654,15 @@
 
   function masterTick(){
     const now = new Date();
+    const headerLiveClock = $('headerLiveClock');
+    if (headerLiveClock){
+      headerLiveClock.textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+    }
     if (papanOverlay.classList.contains('show')){
       papanClock.textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
       updatePapanHighlight();
     }
+    updateCockpitHud(now);
     checkAlarmTriggers(now);
   }
   setInterval(masterTick, 1000);
@@ -2768,7 +2785,7 @@
       kodeRute: data.kodeRute,
       shift: data.shift,
       ritaseRange: data.ritaseFrom + '\u2013' + data.ritaseTo,
-      footer: 'Dibuat oleh PDO \u00B7 Rute ' + data.kodeRute + ' \u00B7 Shift ' + data.shift
+      footer: 'HEDGE By Mikrotrans Utara \u00B7 Rute ' + data.kodeRute + ' \u00B7 Shift ' + data.shift
     };
 
     if (data.format === 'xlsx') return exportSingleXLSX(route, meta, labeledRows, sched);
@@ -2778,7 +2795,7 @@
   }
 
   function exportSingleTXT(route, meta, rows, sched){
-    let text = 'JADWAL KEBERANGKATAN\n' + meta.hari + ', ' + meta.tanggal + '\n' +
+    let text = 'HEDGE \u2014 HEADWAY GENERATOR\nBy Mikrotrans Utara\n' + meta.hari + ', ' + meta.tanggal + '\n' +
       'Rute ' + meta.kodeRute + '   Shift ' + meta.shift + '\n' +
       '='.repeat(48) + '\n' +
       'Periode : ' + rows[0].jam + ' - ' + rows[rows.length-1].jam + '\n' +
@@ -2802,7 +2819,7 @@
   function exportSingleXLSX(route, meta, rows, sched){
     if (typeof XLSX === 'undefined'){ showToast('Library XLSX belum dimuat', 'error'); return; }
     const aoa = [
-      ['JADWAL KEBERANGKATAN ARMADA'],
+      ['HEDGE \u2014 HEADWAY GENERATOR (By Mikrotrans Utara)'],
       [meta.hari + ', ' + meta.tanggal],
       ['Rute: ' + meta.kodeRute, '', 'Shift: ' + meta.shift],
       ['Jam Operasional: ' + sched.startLabel + ' - ' + sched.endLabel, '', 'Total: ' + rows.length + ' Keberangkatan', '', 'Unit: ' + sched.N + ' Unit'],
@@ -2847,8 +2864,8 @@
     // Sheet 1: Master Monitor Gabungan
     const combined = buildCombinedSchedule();
     const masterAoa = [
-      ['MONITOR GABUNGAN KEBERANGKATAN SEMUA RUTE'],
-      [hari + ', ' + tanggal],
+      ['HEDGE \u2014 MONITOR GABUNGAN KEBERANGKATAN SEMUA RUTE'],
+      ['By Mikrotrans Utara \u00B7 ' + hari + ', ' + tanggal],
       ['Total Rute: ' + combined.routesCount, '', 'Total Keberangkatan: ' + combined.totalDep],
       [],
       ['No Urut', 'Kode Rute', 'Nomor Unit', 'Ritase Ke', 'Jam Berangkat', 'Headway Sisa', 'Keterangan']
@@ -2874,8 +2891,8 @@
     routesWithSched.forEach(r => {
       const sched = reconstructDisplaySchedule(r);
       const rAoa = [
-        ['JADWAL KEBERANGKATAN RUTE ' + r.name],
-        [hari + ', ' + tanggal],
+        ['HEDGE \u2014 JADWAL KEBERANGKATAN RUTE ' + r.name],
+        ['By Mikrotrans Utara \u00B7 ' + hari + ', ' + tanggal],
         ['Jam Operasional: ' + sched.startLabel + ' - ' + sched.endLabel, '', 'Ritase: ' + r.ritase, '', 'Unit: ' + sched.N + ' Unit'],
         ['Jam Sibuk: ' + (r.peakEnabled ? 'Aktif' : 'Nonaktif'), '', 'Total: ' + sched.totalDep + ' Keberangkatan'],
         [],
@@ -2906,13 +2923,14 @@
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-    doc.text('JADWAL KEBERANGKATAN ARMADA', 14, 18);
+    doc.text('HEDGE \u2014 HEADWAY GENERATOR', 14, 16);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-    doc.text(meta.hari + ', ' + meta.tanggal, 14, 25);
-    doc.text('Rute: ' + meta.kodeRute + '   Shift: ' + meta.shift + '   Ritase: ' + meta.ritaseRange, 14, 31);
-    doc.text('Total: ' + rows.length + ' Keberangkatan   Unit: ' + sched.N + ' Unit   Jam: ' + sched.startLabel + ' - ' + sched.endLabel, 14, 37);
+    doc.text('By Mikrotrans Utara', 14, 22);
+    doc.text(meta.hari + ', ' + meta.tanggal, 14, 28);
+    doc.text('Rute: ' + meta.kodeRute + '   Shift: ' + meta.shift + '   Ritase: ' + meta.ritaseRange, 14, 34);
+    doc.text('Total: ' + rows.length + ' Keberangkatan   Unit: ' + sched.N + ' Unit   Jam: ' + sched.startLabel + ' - ' + sched.endLabel, 14, 40);
 
-    let y = 47;
+    let y = 49;
     doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
     doc.setFillColor(240, 240, 240);
     doc.rect(14, y - 5, 182, 7, 'F');
@@ -2947,6 +2965,118 @@
   }
 
   if (exportMenuBtn) exportMenuBtn.addEventListener('click', openExportMenu);
+
+  // ===== MOBILE TRANSIT COCKPIT HUD CONTROLLER =====
+  function updateCockpitHud(now){
+    now = now || new Date();
+    const cur = getActiveRoute();
+    if (!cur) return;
+
+    const hudRouteName = $('hudRouteName');
+    const hudColorDot = $('hudColorDot');
+    const hudStatusText = $('hudStatusText');
+    const hudNextUnit = $('hudNextUnit');
+    const hudNextTime = $('hudNextTime');
+    const hudNextGap = $('hudNextGap');
+    const hudNextCountdown = $('hudNextCountdown');
+    const hudNextRitase = $('hudNextRitase');
+
+    const psbHoursPill = $('psbHoursPill');
+    const psbRitasePill = $('psbRitasePill');
+    const psbPeakPill = $('psbPeakPill');
+
+    if (hudRouteName) hudRouteName.textContent = cur.name;
+    if (hudColorDot) hudColorDot.style.background = cur.color || '#FF7A00';
+
+    if (psbHoursPill) psbHoursPill.textContent = '⏱️ ' + cur.jamMulai + '–' + cur.jamSelesai;
+    if (psbRitasePill) psbRitasePill.textContent = '🔄 ' + cur.ritase + ' Rit';
+    if (psbPeakPill) psbPeakPill.textContent = cur.peakEnabled ? '⚡ Peak Aktif' : '⚡ Peak Off';
+
+    const sched = cur.committedSchedule && cur.committedSchedule.rows && cur.committedSchedule.rows.length ? cur.committedSchedule : lastSchedule;
+    if (!sched || !sched.rows || sched.rows.length === 0){
+      if (hudNextUnit) hudNextUnit.textContent = '—';
+      if (hudNextTime) hudNextTime.textContent = '--:--';
+      if (hudNextGap) hudNextGap.textContent = 'Belum Ada';
+      if (hudNextCountdown) hudNextCountdown.textContent = '--:--';
+      if (hudNextRitase) hudNextRitase.textContent = 'Ritase —';
+      if (hudStatusText) hudStatusText.textContent = 'BELUM DIHITUNG';
+      return;
+    }
+
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const curSec = now.getSeconds();
+    const curTotalSec = nowMin * 60 + curSec;
+
+    let nextIdx = -1;
+    for (let i = 0; i < sched.rows.length; i++){
+      const r = sched.rows[i];
+      const rSec = toMinutes(r.jam) * 60;
+      if (rSec + 30 >= curTotalSec){
+        nextIdx = i;
+        break;
+      }
+    }
+
+    if (nextIdx === -1){
+      if (hudNextUnit) hudNextUnit.textContent = 'SELESAI';
+      if (hudNextTime) hudNextTime.textContent = sched.rows[sched.rows.length - 1].jam;
+      if (hudNextGap) hudNextGap.textContent = 'Selesai';
+      if (hudNextCountdown) hudNextCountdown.textContent = '00:00';
+      if (hudNextRitase) hudNextRitase.textContent = 'Semua Ritase Selesai';
+      if (hudStatusText) hudStatusText.textContent = 'DINAS SELESAI';
+    } else {
+      const r = sched.rows[nextIdx];
+      const rSec = toMinutes(r.jam) * 60;
+      const diffSec = rSec - curTotalSec;
+
+      if (hudNextUnit) hudNextUnit.textContent = r.unit;
+      if (hudNextTime) hudNextTime.textContent = r.jam;
+      if (hudNextGap) hudNextGap.textContent = r.interval !== null ? ('+' + r.interval + 'm') : 'awal';
+      if (hudNextRitase) hudNextRitase.textContent = 'Ritase ' + r.ritase + (r.isPeak ? ' ⚡[Peak]' : '');
+
+      if (diffSec > 0){
+        const mm = Math.floor(diffSec / 60);
+        const ss = diffSec % 60;
+        if (hudNextCountdown) hudNextCountdown.textContent = String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+        if (hudStatusText) hudStatusText.textContent = diffSec <= 60 ? '⚡ SIAP JALAN' : 'STANDBY';
+      } else {
+        if (hudNextCountdown) hudNextCountdown.textContent = '00:00';
+        if (hudStatusText) hudStatusText.textContent = '🚨 SAATNYA BERANGKAT';
+      }
+    }
+
+    const bodyRows = document.querySelectorAll('#boardBody .row-item');
+    if (bodyRows.length > 0){
+      bodyRows.forEach((el, idx) => {
+        el.classList.toggle('next-up-active', idx === nextIdx);
+        el.classList.toggle('departed', nextIdx !== -1 && idx < nextIdx);
+      });
+    }
+  }
+
+  // ===== PARAMETER DRAWER & MOBILE DOCK BINDINGS =====
+  const toggleParamBtn = $('toggleParamBtn');
+  const paramDrawer = $('paramDrawer');
+  if (toggleParamBtn && paramDrawer){
+    toggleParamBtn.addEventListener('click', () => {
+      const isCol = paramDrawer.classList.toggle('collapsed');
+      toggleParamBtn.classList.toggle('open', !isCol);
+    });
+  }
+
+  const dockCopyBtn = $('dockCopyBtn');
+  const dockRecalcBtn = $('dockRecalcBtn');
+  const dockMonitorBtn = $('dockMonitorBtn');
+  const dockExportBtn = $('dockExportBtn');
+
+  if (dockCopyBtn) dockCopyBtn.addEventListener('click', () => { const b = $('copyBtn'); if (b) b.click(); });
+  if (dockRecalcBtn) dockRecalcBtn.addEventListener('click', () => {
+    const b = $('recalcBtn');
+    if (b && $('dirtyBanner') && $('dirtyBanner').classList.contains('show')){ b.click(); }
+    else { const gb = $('generateBtn'); if (gb) gb.click(); }
+  });
+  if (dockMonitorBtn) dockMonitorBtn.addEventListener('click', () => { const b = $('headerMonitorBtn'); if (b) b.click(); });
+  if (dockExportBtn) dockExportBtn.addEventListener('click', () => { const b = $('exportMenuBtn'); if (b) b.click(); });
 
   // ===== INITIALIZATION =====
   function updateHeaderHeight(){

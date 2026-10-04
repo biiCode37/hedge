@@ -1,6 +1,6 @@
 {
-  "name": "Jadwal Keberangkatan",
-  "description": "Aplikasi manajemen jadwal keberangkatan armada bus otomatis & mode papan display untuk pos dispatch.",
+  "name": "HEDGE - Headway Generator",
+  "description": "HEDGE (Headway Generator) By Mikrotrans Utara - Aplikasi manajemen jadwal keberangkatan armada bus otomatis & mode papan display untuk pos dispatch.",
   "permissions": [],
   "capabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -1,12 +1,13 @@
-// Service Worker — Jadwal Keberangkatan
+// Service Worker — HEDGE: Headway Generator (By Mikrotrans Utara)
 // Tujuan: (1) memenuhi syarat wajib PWA agar app bisa di-"Install"/"Add to Home Screen" di HP,
 // (2) menyimpan app-shell di cache supaya app tetap bisa dibuka meski koneksi internet putus.
-const CACHE_NAME = 'jadwal-berangkat-v10';
+const CACHE_NAME = 'hedge-v12';
 const APP_SHELL = [
   './',
   './index.html',
   './app.js',
   './manifest.json',
+  './assets/hedge-logo.jpg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',

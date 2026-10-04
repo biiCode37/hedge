@@ -1,7 +1,7 @@
 {
-  "name": "Jadwal Keberangkatan",
-  "short_name": "Jadwal",
-  "description": "Jadwal keberangkatan otomatis & mode papan display untuk pos dispatch.",
+  "name": "HEDGE - Headway Generator",
+  "short_name": "HEDGE",
+  "description": "HEDGE (Headway Generator) By Mikrotrans Utara - Jadwal keberangkatan otomatis & mode papan display untuk pos dispatch.",
   "id": "/",
   "start_url": "./index.html",
   "scope": "./",

@@ -5,19 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Jadwal Berangkat">
+<meta name="apple-mobile-web-app-title" content="HEDGE">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0C1017">
-<title>Jadwal Keberangkatan - Dispatcher Mikrotrans</title>
-<meta name="description" content="Aplikasi mobile dispatcher jadwal keberangkatan armada bus otomatis & monitor papan display.">
-<meta property="og:title" content="Jadwal Keberangkatan">
-<meta property="og:description" content="Aplikasi mobile dispatcher jadwal keberangkatan armada bus otomatis & monitor papan display.">
+<title>HEDGE - Headway Generator | By Mikrotrans Utara</title>
+<meta name="description" content="HEDGE (Headway Generator) By Mikrotrans Utara - Aplikasi dispatcher jadwal keberangkatan armada bus otomatis & monitor papan display.">
+<meta property="og:title" content="HEDGE - Headway Generator">
+<meta property="og:description" content="HEDGE (Headway Generator) By Mikrotrans Utara - Aplikasi dispatcher jadwal keberangkatan armada bus otomatis & monitor papan display.">
 
 <!-- PWA: manifest & icons -->
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/jpeg" href="assets/hedge-logo.jpg">
+<link rel="apple-touch-icon" href="assets/hedge-logo.jpg">
 
 <!-- Fonts & Vendor Libraries -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,33 +30,40 @@
 
 <style>
   :root {
-    --bg: #0C1017;
-    --surface: #141A24;
-    --surface-2: #1B2332;
-    --surface-3: #242E42;
+    --bg: #070B12;
+    --surface: #0E1524;
+    --surface-2: #141E33;
+    --surface-3: #1B2945;
     --line: rgba(255, 255, 255, 0.08);
-    --line-subtle: rgba(255, 255, 255, 0.05);
-    --line-strong: rgba(255, 255, 255, 0.16);
-    --amber: #F59E0B;
-    --amber-hover: #D97706;
+    --line-subtle: rgba(255, 255, 255, 0.04);
+    --line-strong: rgba(0, 229, 255, 0.25);
+    --orange: #FF7A00;
+    --orange-glow: rgba(255, 122, 0, 0.4);
+    --amber: #FF9800;
+    --amber-hover: #F57C00;
     --amber-dim: #78350F;
-    --amber-glow: rgba(245, 158, 11, 0.18);
-    --emerald: #10B981;
-    --emerald-dim: rgba(16, 185, 129, 0.16);
+    --amber-glow: rgba(255, 152, 0, 0.3);
+    --cyan: #00E5FF;
+    --cyan-glow: rgba(0, 229, 255, 0.4);
     --sky: #38BDF8;
     --sky-dim: rgba(56, 189, 248, 0.16);
+    --emerald: #10B981;
+    --emerald-dim: rgba(16, 185, 129, 0.16);
     --danger: #EF4444;
     --danger-dim: rgba(239, 68, 68, 0.16);
     --text: #F8FAFC;
     --text-muted: #94A3B8;
     --text-dim: #64748B;
-    --r-item-bg: rgba(255, 255, 255, 0.015);
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
+    --grad-hedge: linear-gradient(135deg, #FF7A00 0%, #00E5FF 100%);
+    --grad-orange: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+    --grad-cyan: linear-gradient(135deg, #00E5FF 0%, #0284C7 100%);
+    --r-item-bg: rgba(255, 255, 255, 0.02);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-top: env(safe-area-inset-top, 0px);
-    --app-header-h: calc(44px + var(--safe-top));
+    --app-header-h: calc(52px + var(--safe-top));
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -75,7 +81,7 @@
     color: var(--text);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
-    padding-bottom: calc(64px + var(--safe-bottom));
+    padding-bottom: calc(128px + var(--safe-bottom));
     -webkit-font-smoothing: antialiased;
     touch-action: manipulation;
   }
@@ -180,47 +186,86 @@
     position: sticky;
     top: 0;
     z-index: 60;
-    background: rgba(12, 16, 23, 0.96);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line);
+    background: rgba(7, 11, 18, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.18);
     padding: calc(6px + var(--safe-top)) 12px 6px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    height: calc(44px + var(--safe-top));
+    min-height: calc(52px + var(--safe-top));
     box-sizing: border-box;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
   }
   .header-left {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     min-width: 0;
   }
-  .brand-icon {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    background: linear-gradient(135deg, #F59E0B, #D97706);
+  .brand-logo-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0, 229, 255, 0.45);
+    box-shadow: 0 0 12px rgba(255, 122, 0, 0.35), 0 0 8px rgba(0, 229, 255, 0.3);
+    background: #06090E;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1A1300;
-    font-weight: 800;
-    font-size: 13px;
-    flex-shrink: 0;
+  }
+  .brand-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 26%;
+    transform: scale(1.45);
+    display: block;
+  }
+  .brand-text-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    min-width: 0;
   }
   .brand-title {
     margin: 0;
     font-family: 'Space Mono', monospace;
-    font-size: 13px;
+    font-size: 14.5px;
     font-weight: 800;
+    letter-spacing: 0.08em;
+    background: linear-gradient(180deg, #FFFFFF 40%, #CFFAFE 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.15;
+    white-space: nowrap;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.35));
+  }
+  .brand-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+    line-height: 1.15;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .brand-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 8.5px;
+    font-weight: 500;
     letter-spacing: 0.02em;
-    color: var(--text);
+    color: var(--text-dim);
+    line-height: 1.1;
     white-space: nowrap;
   }
-  .brand-title span { color: var(--amber); }
 
   .header-right {
     display: flex;
@@ -232,9 +277,10 @@
     font-family: 'Space Mono', monospace;
     font-size: 12px;
     font-weight: 700;
-    color: var(--amber);
+    color: var(--cyan);
     background: var(--surface-2);
-    border: 1px solid var(--line);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.12);
     padding: 5px 8px;
     border-radius: var(--radius-sm);
     font-variant-numeric: tabular-nums;
@@ -243,8 +289,8 @@
     width: 32px;
     height: 32px;
     border-radius: var(--radius-sm);
-    background: var(--amber);
-    color: #1A1300;
+    background: var(--grad-hedge);
+    color: #070B12;
     border: none;
     cursor: pointer;
     display: inline-flex;
@@ -252,10 +298,362 @@
     justify-content: center;
     padding: 0;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
-    transition: transform .1s ease;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+    transition: transform .1s ease, filter .15s ease;
   }
   .quick-monitor-btn:active { transform: scale(0.92); }
+
+  /* ===== MOBILE TRANSIT COCKPIT HUD ===== */
+  .cockpit-hud {
+    background: linear-gradient(180deg, rgba(14, 21, 36, 0.96) 0%, rgba(7, 11, 18, 0.98) 100%);
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: var(--radius-md);
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .cockpit-hud::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--grad-hedge);
+  }
+  .hud-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .hud-route-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+  .hud-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 6px var(--orange);
+  }
+  .hud-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    color: var(--emerald);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    padding: 2px 7px;
+    border-radius: 12px;
+  }
+  .hud-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--emerald);
+    box-shadow: 0 0 6px var(--emerald);
+    animation: hudPulseAnim 1.8s infinite;
+  }
+  @keyframes hudPulseAnim {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .hud-hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+  }
+  .hud-kicker {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .hud-unit-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+  .hud-unit-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+  }
+  .hud-unit-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 10px rgba(255, 122, 0, 0.3);
+  }
+  .hud-sub-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .hud-sub-jam {
+    color: var(--orange);
+    font-weight: 700;
+  }
+  .hud-sub-gap {
+    color: var(--cyan);
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    padding: 0 5px;
+    border-radius: 4px;
+    font-size: 9.5px;
+  }
+  .hud-timer-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: right;
+  }
+  .hud-timer-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--cyan);
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+    line-height: 1.1;
+  }
+  .hud-timer-note {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .hud-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--line);
+  }
+  .hud-metric {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    padding: 4px 2px;
+  }
+  .hm-val {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .hm-lbl {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== PARAMETER SUMMARY BAR & COLLAPSIBLE DRAWER ===== */
+  .param-summary-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+  }
+  .psb-pills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+    min-width: 0;
+  }
+  .psb-pills::-webkit-scrollbar { display: none; }
+  .psb-pill {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    padding: 3px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+  }
+  .psb-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: var(--cyan);
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .psb-toggle-btn:active { transform: scale(0.95); }
+  .psb-arrow {
+    transition: transform .25s ease;
+  }
+  .psb-toggle-btn.open .psb-arrow {
+    transform: rotate(180deg);
+  }
+  .param-drawer {
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin 0.25s ease;
+  }
+  .param-drawer.collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+    margin-bottom: 0 !important;
+    pointer-events: none;
+  }
+  .param-drawer:not(.collapsed) {
+    max-height: 2000px;
+    opacity: 1;
+    margin-bottom: 10px;
+    pointer-events: auto;
+  }
+
+  /* ===== MOBILE ERGONOMIC FLOATING THUMB DOCK ===== */
+  .mobile-action-dock {
+    position: fixed;
+    bottom: calc(56px + var(--safe-bottom) + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    max-width: 480px;
+    z-index: 55;
+    background: rgba(14, 21, 36, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: 14px;
+    padding: 6px 8px;
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr 1fr;
+    gap: 6px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 15px rgba(0, 229, 255, 0.15);
+  }
+  .dock-btn {
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: 9px;
+    padding: 8px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: transform .1s ease, background .15s ease, border-color .15s ease;
+    touch-action: manipulation;
+  }
+  .dock-btn svg { flex-shrink: 0; }
+  .dock-btn:active { transform: scale(0.94); }
+  .dock-btn.primary-glow {
+    background: var(--grad-hedge);
+    border: none;
+    color: #070B12;
+    box-shadow: 0 2px 10px rgba(255, 122, 0, 0.35);
+    flex-direction: row;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  /* Table next departure glow & past departure dim */
+  .row-item.next-up-active {
+    background: linear-gradient(90deg, rgba(0, 229, 255, 0.18) 0%, rgba(255, 122, 0, 0.12) 100%) !important;
+    border: 1px solid var(--cyan) !important;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+    transform: scale(1.01);
+    position: relative;
+    z-index: 2;
+  }
+  .row-item.next-up-active .no {
+    color: var(--cyan) !important;
+    font-weight: 800;
+  }
+  .row-item.next-up-active .unit {
+    color: #FFFFFF !important;
+    font-weight: 800;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  }
+  .row-item.next-up-active .jam {
+    color: var(--orange) !important;
+    font-weight: 800;
+  }
+  .row-item.departed {
+    opacity: 0.52;
+    background: rgba(255, 255, 255, 0.008);
+  }
+
+  /* Papan display logo badge */
+  .papan-brand-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .papan-logo-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 229, 255, 0.45);
+    box-shadow: 0 0 12px rgba(255, 122, 0, 0.35);
+    background: #06090E;
+    flex-shrink: 0;
+  }
+  .papan-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 26%;
+    transform: scale(1.45);
+  }
+  .papan-title-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+  }
 
   /* ===== MAIN CONTAINER ===== */
   main {
@@ -1377,11 +1775,16 @@
 </head>
 <body>
 
-<!-- ============ TOP COMPACT HEADER ============ -->
 <header class="app-header">
   <div class="header-left">
-    <div class="brand-icon">M</div>
-    <h1 class="brand-title">JADWAL<span>.</span>BERANGKAT</h1>
+    <div class="brand-logo-badge" aria-hidden="true">
+      <img src="assets/hedge-logo.jpg" alt="HEDGE Logo" class="brand-logo-img">
+    </div>
+    <div class="brand-text-group">
+      <h1 class="brand-title">HEDGE</h1>
+      <div class="brand-subtitle">Headway Generator</div>
+      <div class="brand-meta">By Mikrotrans Utara</div>
+    </div>
   </div>
   <div class="header-right">
     <div class="live-clock" id="headerLiveClock">--:--:--</div>
@@ -1404,152 +1807,204 @@
   <!-- ============ PANEL 1: JADWAL KEBERANGKATAN ============ -->
   <div class="panel active" id="panelJadwal">
 
-    <div class="card">
-      <h2>
-        <span>Jam Operasional &amp; Ritase</span>
-        <button type="button" class="tip-btn" data-tip="Atur rentang jam dinas dan target putaran armada per hari." aria-label="Info Jam Operasional">ⓘ</button>
-      </h2>
-      <div class="row">
-        <div class="field">
-          <label for="jamMulai">Mulai</label>
-          <input type="time" id="jamMulai" value="05:00">
+    <!-- COCKPIT HERO HUD -->
+    <div class="cockpit-hud" id="cockpitHud">
+      <div class="hud-top">
+        <div class="hud-route-tag" id="hudRouteTag">
+          <span class="hud-dot" id="hudColorDot"></span>
+          <span id="hudRouteName">JAK.115</span>
         </div>
-        <div class="field">
-          <label for="jamSelesai">Selesai</label>
-          <input type="time" id="jamSelesai" value="22:00">
+        <div class="hud-status-badge" id="hudStatusBadge">
+          <span class="hud-pulse"></span>
+          <span id="hudStatusText">AKTIF OPERASIONAL</span>
         </div>
       </div>
-
-      <div class="field">
-        <label for="ritase">
-          <span>Target Ritase</span>
-          <button type="button" class="tip-btn" data-tip="Jumlah putaran ritase yang harus diselesaikan tiap armada aktif." aria-label="Info Target Ritase">ⓘ</button>
-        </label>
-        <div class="stepper">
-          <button type="button" id="ritaseMinus" aria-label="Kurangi ritase">&minus;</button>
-          <input type="number" inputmode="numeric" id="ritase" value="8" min="1" max="30">
-          <button type="button" id="ritasePlus" aria-label="Tambah ritase">+</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>
-          <span>Pola Headway</span>
-          <button type="button" class="tip-btn" data-tip="Urutan blok interval di tiap zona: misal 3 mnt lalu 4 mnt, atau sebaliknya." aria-label="Info Pola Headway">ⓘ</button>
-        </label>
-        <div class="order-toggle">
-          <button type="button" id="orderFastFirst" class="active">Cepat &rarr; Lambat</button>
-          <button type="button" id="orderSlowFirst">Lambat &rarr; Cepat</button>
-        </div>
-      </div>
-
-      <!-- Quick fleet status badge -->
-      <div style="background:var(--surface-2); padding:8px 10px; margin-bottom:8px; border-radius:6px; border:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
-        <span class="mono" id="activeSummaryText" style="color:var(--amber); font-weight:700; font-size:11.5px;">0 / 0 unit aktif</span>
-        <a id="goToUnitTab" style="color:var(--sky); font-size:11px; font-weight:700; cursor:pointer; text-decoration:none;">Kelola &rarr;</a>
-      </div>
-
-      <details class="advanced">
-        <summary>
-          <span class="summary-label">Jam Sibuk (Peak Hour)</span>
-          <button type="button" class="tip-btn" data-tip="Headway jam sibuk dipatok tetap sesuai menit ini. Sisa waktu di luar jam sibuk dibagi otomatis." aria-label="Info Jam Sibuk">ⓘ</button>
-        </summary>
-        <div class="peak-toggle-row">
-          <span>Aktifkan jam sibuk</span>
-          <div class="switch" id="peakToggle"><div class="knob"></div></div>
-        </div>
-        <div class="advanced-body">
-          <div class="peak-block">
-            <div class="peak-block-title">SIBUK PAGI</div>
-            <div class="row">
-              <div class="field"><label>Mulai</label><input type="time" id="peak1Start" value="05:00"></div>
-              <div class="field"><label>Selesai</label><input type="time" id="peak1End" value="08:00"></div>
-            </div>
-            <div class="field" style="margin-bottom:0;">
-              <label for="peak1Interval">Headway (menit)</label>
-              <input type="number" inputmode="numeric" id="peak1Interval" value="2" min="1" max="60" step="1">
-            </div>
+      <div class="hud-hero-grid">
+        <div class="hud-next-box">
+          <div class="hud-kicker">KEBERANGKATAN BERIKUTNYA</div>
+          <div class="hud-unit-row">
+            <span class="hud-unit-lbl">UNIT</span>
+            <span class="hud-unit-val mono" id="hudNextUnit">—</span>
           </div>
-          <div class="peak-block">
-            <div class="peak-block-title">SIBUK SORE</div>
-            <div class="row">
-              <div class="field"><label>Mulai</label><input type="time" id="peak2Start" value="17:00"></div>
-              <div class="field"><label>Selesai</label><input type="time" id="peak2End" value="19:00"></div>
-            </div>
-            <div class="field" style="margin-bottom:0;">
-              <label for="peak2Interval">Headway (menit)</label>
-              <input type="number" inputmode="numeric" id="peak2Interval" value="3" min="1" max="60" step="1">
-            </div>
+          <div class="hud-sub-info">
+            <span class="hud-sub-jam mono" id="hudNextTime">--:--</span>
+            <span class="hud-sub-gap mono" id="hudNextGap">—</span>
           </div>
         </div>
-      </details>
-    </div>
-
-    <div class="card">
-      <h2>
-        <span>Alarm Otomatis</span>
-        <button type="button" class="tip-btn" data-tip="Alarm bersuara tepat jam keberangkatan & berhenti sendiri sesuai durasi ini atau ditekan OK." aria-label="Info Alarm">ⓘ</button>
-      </h2>
-      <div class="peak-toggle-row" style="padding:0 0 8px;">
-        <span>Bunyikan saat berangkat</span>
-        <div class="switch" id="alarmToggle"><div class="knob"></div></div>
-      </div>
-      <div class="field" style="margin-bottom:10px;">
-        <label for="alarmDuration">Durasi bunyi (detik)</label>
-        <div class="stepper">
-          <button type="button" id="alarmDurMinus" aria-label="Kurangi durasi">&minus;</button>
-          <input type="number" inputmode="numeric" id="alarmDuration" value="8" min="1" max="30">
-          <button type="button" id="alarmDurPlus" aria-label="Tambah durasi">+</button>
+        <div class="hud-timer-box">
+          <div class="hud-kicker">HITUNG MUNDUR</div>
+          <div class="hud-timer-val mono" id="hudNextCountdown">--:--</div>
+          <div class="hud-timer-note" id="hudNextRitase">Ritase —</div>
         </div>
       </div>
-      <div class="field" style="margin-bottom:0;">
-        <label for="alarmPrepSeconds">Waktu persiapan sebelum berangkat (detik)</label>
-        <div class="stepper">
-          <button type="button" id="alarmPrepMinus" aria-label="Kurangi waktu persiapan">&minus;</button>
-          <input type="number" inputmode="numeric" id="alarmPrepSeconds" value="10" min="0" max="60">
-          <button type="button" id="alarmPrepPlus" aria-label="Tambah waktu persiapan">+</button>
+      <div class="hud-metrics">
+        <div class="hud-metric">
+          <div class="hm-val mono" id="statTotal">—</div>
+          <div class="hm-lbl">Berangkat</div>
         </div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
-          Peringatan bip &amp; bar merah menyala <span id="alarmPrepLabel">10 detik</span> sebelum jam keberangkatan.
+        <div class="hud-metric">
+          <div class="hm-val mono" id="statDurasi">—</div>
+          <div class="hm-lbl">Durasi</div>
+        </div>
+        <div class="hud-metric">
+          <div class="hm-val mono" id="statUnit">—</div>
+          <div class="hm-lbl">Armada</div>
         </div>
       </div>
     </div>
 
-    <div class="dirty-banner" id="dirtyBanner">
-      <span class="dirty-banner-text">&#9888; Unit/urutan berubah</span>
-      <button type="button" id="recalcBtn">&#8635; Hitung Ulang</button>
+    <!-- Pattern note info -->
+    <div class="pattern-note" id="patternNote"></div>
+
+    <!-- Parameter summary pill bar + collapsible drawer -->
+    <div class="param-summary-bar" id="paramSummaryBar">
+      <div class="psb-pills">
+        <span class="psb-pill mono" id="psbHoursPill">⏱️ 05:00–22:00</span>
+        <span class="psb-pill mono" id="psbRitasePill">🔄 8 Rit</span>
+        <span class="psb-pill mono" id="psbPeakPill">⚡ Peak: Off</span>
+      </div>
+      <button type="button" class="psb-toggle-btn" id="toggleParamBtn">
+        <span>⚙️ Parameter</span>
+        <svg class="psb-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
     </div>
 
-    <div class="error-box" id="errorBox"></div>
+    <!-- Collapsible Parameter Drawer -->
+    <div class="param-drawer collapsed" id="paramDrawer">
+      <div class="card">
+        <h2>
+          <span>Jam Operasional &amp; Ritase</span>
+          <button type="button" class="tip-btn" data-tip="Atur rentang jam dinas dan target putaran armada per hari." aria-label="Info Jam Operasional">ⓘ</button>
+        </h2>
+        <div class="row">
+          <div class="field">
+            <label for="jamMulai">Mulai</label>
+            <input type="time" id="jamMulai" value="05:00">
+          </div>
+          <div class="field">
+            <label for="jamSelesai">Selesai</label>
+            <input type="time" id="jamSelesai" value="22:00">
+          </div>
+        </div>
 
-    <div class="generate-group">
-      <button type="button" class="generate-btn-main" id="generateBtn">Buat Jadwal</button>
-      <button type="button" class="generate-btn-all" id="generateAllBtn" data-tooltip="Hitung semua rute sekaligus">&#9889; Semua Rute</button>
+        <div class="field">
+          <label for="ritase">
+            <span>Target Ritase</span>
+            <button type="button" class="tip-btn" data-tip="Jumlah putaran ritase yang harus diselesaikan tiap armada aktif." aria-label="Info Target Ritase">ⓘ</button>
+          </label>
+          <div class="stepper">
+            <button type="button" id="ritaseMinus" aria-label="Kurangi ritase">&minus;</button>
+            <input type="number" inputmode="numeric" id="ritase" value="8" min="1" max="30">
+            <button type="button" id="ritasePlus" aria-label="Tambah ritase">+</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Pola Headway</span>
+            <button type="button" class="tip-btn" data-tip="Urutan blok interval di tiap zona: misal 3 mnt lalu 4 mnt, atau sebaliknya." aria-label="Info Pola Headway">ⓘ</button>
+          </label>
+          <div class="order-toggle">
+            <button type="button" id="orderFastFirst" class="active">Cepat &rarr; Lambat</button>
+            <button type="button" id="orderSlowFirst">Lambat &rarr; Cepat</button>
+          </div>
+        </div>
+
+        <!-- Quick fleet status badge -->
+        <div style="background:var(--surface-2); padding:8px 10px; margin-bottom:8px; border-radius:6px; border:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+          <span class="mono" id="activeSummaryText" style="color:var(--orange); font-weight:700; font-size:11.5px;">0 / 0 unit aktif</span>
+          <a id="goToUnitTab" style="color:var(--cyan); font-size:11px; font-weight:700; cursor:pointer; text-decoration:none;">Kelola &rarr;</a>
+        </div>
+
+        <details class="advanced">
+          <summary>
+            <span class="summary-label">Jam Sibuk (Peak Hour)</span>
+            <button type="button" class="tip-btn" data-tip="Headway jam sibuk dipatok tetap sesuai menit ini. Sisa waktu di luar jam sibuk dibagi otomatis." aria-label="Info Jam Sibuk">ⓘ</button>
+          </summary>
+          <div class="peak-toggle-row">
+            <span>Aktifkan jam sibuk</span>
+            <div class="switch" id="peakToggle"><div class="knob"></div></div>
+          </div>
+          <div class="advanced-body">
+            <div class="peak-block">
+              <div class="peak-block-title">SIBUK PAGI</div>
+              <div class="row">
+                <div class="field"><label>Mulai</label><input type="time" id="peak1Start" value="05:00"></div>
+                <div class="field"><label>Selesai</label><input type="time" id="peak1End" value="08:00"></div>
+              </div>
+              <div class="field" style="margin-bottom:0;">
+                <label for="peak1Interval">Headway (menit)</label>
+                <input type="number" inputmode="numeric" id="peak1Interval" value="2" min="1" max="60" step="1">
+              </div>
+            </div>
+            <div class="peak-block">
+              <div class="peak-block-title">SIBUK SORE</div>
+              <div class="row">
+                <div class="field"><label>Mulai</label><input type="time" id="peak2Start" value="17:00"></div>
+                <div class="field"><label>Selesai</label><input type="time" id="peak2End" value="19:00"></div>
+              </div>
+              <div class="field" style="margin-bottom:0;">
+                <label for="peak2Interval">Headway (menit)</label>
+                <input type="number" inputmode="numeric" id="peak2Interval" value="3" min="1" max="60" step="1">
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>
+          <span>Alarm Otomatis</span>
+          <button type="button" class="tip-btn" data-tip="Alarm bersuara tepat jam keberangkatan & berhenti sendiri sesuai durasi ini atau ditekan OK." aria-label="Info Alarm">ⓘ</button>
+        </h2>
+        <div class="peak-toggle-row" style="padding:0 0 8px;">
+          <span>Bunyikan saat berangkat</span>
+          <div class="switch" id="alarmToggle"><div class="knob"></div></div>
+        </div>
+        <div class="field" style="margin-bottom:10px;">
+          <label for="alarmDuration">Durasi bunyi (detik)</label>
+          <div class="stepper">
+            <button type="button" id="alarmDurMinus" aria-label="Kurangi durasi">&minus;</button>
+            <input type="number" inputmode="numeric" id="alarmDuration" value="8" min="1" max="30">
+            <button type="button" id="alarmDurPlus" aria-label="Tambah durasi">+</button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="alarmPrepSeconds">Waktu persiapan sebelum berangkat (detik)</label>
+          <div class="stepper">
+            <button type="button" id="alarmPrepMinus" aria-label="Kurangi waktu persiapan">&minus;</button>
+            <input type="number" inputmode="numeric" id="alarmPrepSeconds" value="10" min="0" max="60">
+            <button type="button" id="alarmPrepPlus" aria-label="Tambah waktu persiapan">+</button>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+            Peringatan bip &amp; bar merah menyala <span id="alarmPrepLabel">10 detik</span> sebelum jam keberangkatan.
+          </div>
+        </div>
+      </div>
+
+      <div class="dirty-banner" id="dirtyBanner">
+        <span class="dirty-banner-text">&#9888; Unit/urutan berubah</span>
+        <button type="button" id="recalcBtn">&#8635; Hitung Ulang</button>
+      </div>
+
+      <div class="error-box" id="errorBox"></div>
+
+      <div class="generate-group">
+        <button type="button" class="generate-btn-main" id="generateBtn">Buat Jadwal</button>
+        <button type="button" class="generate-btn-all" id="generateAllBtn" data-tooltip="Hitung semua rute sekaligus">&#9889; Semua Rute</button>
+      </div>
     </div>
 
+    <!-- Hidden fallback action row for script bindings -->
+    <div class="action-row" style="display:none;">
+      <button type="button" class="ghost-btn" id="copyBtn">Salin (WA)</button>
+      <button type="button" class="ghost-btn" id="exportMenuBtn">Export ▾</button>
+      <button type="button" class="papan-btn" id="openPapanBtn">Papan Rute Ini</button>
+      <button type="button" class="papan-btn papan-btn-combined" id="openPapanCombinedBtn">Monitor Semua</button>
+    </div>
+
+    <!-- ============ STICKY ROUTE TABS & TABLE HEADER ============ -->
     <div id="resultSection">
-      <div class="summary">
-        <div class="stat"><div class="n" id="statTotal">&mdash;</div><div class="l">Berangkat</div></div>
-        <div class="stat"><div class="n" id="statDurasi">&mdash;</div><div class="l">Durasi</div></div>
-        <div class="stat"><div class="n" id="statUnit">&mdash;</div><div class="l">Armada</div></div>
-      </div>
-      <div class="pattern-note" id="patternNote"></div>
-      <div class="action-row">
-        <button type="button" class="ghost-btn" id="copyBtn" data-tooltip="Salin teks rapi untuk dikirim ke grup WhatsApp">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <span>Salin (WA)</span>
-        </button>
-        <button type="button" class="ghost-btn" id="exportMenuBtn" data-tooltip="Export Excel, PDF, TXT, Gambar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>Export &#9662;</span>
-        </button>
-      </div>
-      <div class="papan-actions-group">
-        <button type="button" class="papan-btn" id="openPapanBtn">&#128250; Papan Rute Ini</button>
-        <button type="button" class="papan-btn papan-btn-combined" id="openPapanCombinedBtn">&#127760; Monitor Semua</button>
-      </div>
-
-      <!-- ============ STICKY ROUTE TABS & TABLE HEADER ============ -->
       <div class="schedule-table-sticky-wrap" id="scheduleStickyWrap">
         <!-- Daftar Tab Rute Aktif Pada Halaman Jadwal -->
         <div class="route-nav-section" id="routeNavSection">
@@ -1582,6 +2037,26 @@
       <div class="board" id="scheduleBoard">
         <div id="boardBody"></div>
       </div>
+    </div>
+
+    <!-- Mobile Ergonomic Thumb Dock -->
+    <div class="mobile-action-dock" id="mobileActionDock">
+      <button type="button" class="dock-btn primary-glow" id="dockCopyBtn" data-tooltip="Salin ke WhatsApp">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span>Salin WA</span>
+      </button>
+      <button type="button" class="dock-btn" id="dockRecalcBtn" data-tooltip="Hitung Ulang Sisa Jadwal">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        <span>Recalc</span>
+      </button>
+      <button type="button" class="dock-btn" id="dockMonitorBtn" data-tooltip="Buka Papan Display">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+        <span>Monitor</span>
+      </button>
+      <button type="button" class="dock-btn" id="dockExportBtn" data-tooltip="Menu Ekspor">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export</span>
+      </button>
     </div>
   </div>
 
@@ -1719,9 +2194,15 @@
   </div>
 
   <div class="papan-topbar">
-    <div>
-      <div class="papan-route" id="papanRoute">JADWAL KEBERANGKATAN</div>
-      <div class="papan-date" id="papanDate">&mdash;</div>
+    <div class="papan-brand-left">
+      <div class="papan-logo-badge">
+        <img src="assets/hedge-logo.jpg" alt="HEDGE Logo" class="papan-logo-img">
+      </div>
+      <div>
+        <div class="papan-title-tag">HEDGE &middot; Headway Generator &middot; By Mikrotrans Utara</div>
+        <div class="papan-route" id="papanRoute">JADWAL KEBERANGKATAN</div>
+        <div class="papan-date" id="papanDate">&mdash;</div>
+      </div>
     </div>
     <div class="papan-topbar-right">
       <div class="papan-mode-selector" id="papanModeSelector">
